@@ -27,7 +27,7 @@ def get_issue_status(env, issue_id):
     deferred.addCallback(callback).addErrback(errback)
 
 def message(env, message):
-    if env.user.name in env.plugin.ignore_name:
+    if env.user.name in env.plugin.ignore_names:
         return
     numbers = []
     for regex in env.plugin.regexes:
