@@ -27,7 +27,7 @@ def get_issue_status(env, issue_id):
     deferred.addCallback(callback).addErrback(errback)
 
 def message(env, message):
-    if env.user.name in env.plugin.ignore_names:
+    if env.user.name.lower() in env.plugin.ignore_names:
         return
     numbers = []
     for regex in env.plugin.regexes:
@@ -43,7 +43,7 @@ def register(app, conf):
     plugin = app.add_plugin('GitHub')
     plugin.regexes = map(compile_re, conf.get('issues-regex', []))
     plugin.reponame = conf.get('reponame', None)
-    plugin.ignore_names = conf.get('ignore', [])
+    plugin.ignore_names = [name.lower() for name in conf.get('ignore', [])]
     if plugin.reponame and plugin.regexes:
         plugin.bind_event('message', message)
     else:
